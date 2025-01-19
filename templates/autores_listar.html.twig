@@ -1,0 +1,10 @@
+{% extends "base.html.twig" %}
+
+{% block cuerpo %}
+    <table border="1px">
+        <tr><td>Nombre</td><td>Apellidos</td><td>Fecha Nacimiento</td></tr>
+        {% for autor in autores %}
+            <tr><td>{{ autor.nombre }}</td><td>Apellidos</td><td>Fecha Nacimiento</td></tr>
+        {% endfor %}
+    </table>
+{% endblock %}

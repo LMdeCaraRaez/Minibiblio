@@ -1,0 +1,10 @@
+{% extends "base.html.twig" %}
+
+{% block cuerpo %}
+    <table border="1px">
+        <tr><td>Editorial</td><td>Titulo</td><td>Año Publicación</td><td>Paginas</td></tr>
+    {% for libro in libros %}
+        <tr><td>{{ libro.editorial.nombre }}</td><td><a href="{{ path('libro_autores', {'id': libro.id }) }}">{{ libro.titulo }}</a></td><td>{{ libro.anioPublicacion | date("d-m-Y") }}</td><td>{{ libro.paginas }}</td></tr>
+    {% endfor %}
+    </table>
+{% endblock %}
