@@ -35,4 +35,17 @@ class LibroController extends AbstractController
         $libros = $libroRepository->listarLibrosOrderByTitulo();
         return $this->render("ap1.html.twig", ["libros" => $libros]);
     }
+    #[Route("/ap2", name: "ap2")]
+    function ap2(LibroRepository $libroRepository): Response
+    {
+        $libros = $libroRepository->listarLibrosOrderByAnioDesc();
+        return $this->render("ap2.html.twig", ["libros" => $libros]);
+    }
+
+    #[Route("/ap3", name: "ap3")]
+    function ap3(LibroRepository $libroRepository): Response
+    {
+        $libros = $libroRepository->listarLibrosPorContenerPalabra("tormentas");
+        return $this->render("ap1.html.twig", ["libros" => $libros]);
+    }
 }
