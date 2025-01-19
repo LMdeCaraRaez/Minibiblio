@@ -48,4 +48,18 @@ class LibroController extends AbstractController
         $libros = $libroRepository->listarLibrosPorContenerPalabra("tormentas");
         return $this->render("ap1.html.twig", ["libros" => $libros]);
     }
+
+    #[Route("/ap4", name: "ap4")]
+    function ap4(LibroRepository $libroRepository): Response
+    {
+        $libros = $libroRepository->listarLibrosSinAEnEditorial();
+        return $this->render("ap4.html.twig", ["libros" => $libros]);
+    }
+    #[Route("/ap5", name: "ap5")]
+    function ap5(LibroRepository $libroRepository): Response
+    {
+        $libros = $libroRepository->listarLibrosConUnAutor();
+
+        return $this->render("ap5.html.twig", ["libros" => $libros]);
+    }
 }

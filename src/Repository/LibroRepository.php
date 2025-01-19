@@ -38,4 +38,12 @@ class LibroRepository extends ServiceEntityRepository
     {
         return $this->getEntityManager()->createQuery("select l from App\\Entity\\Libro l where l.titulo like :titulo")->setParameter(":titulo", "%" . $palabra . "%")->getResult();
     }
+    function listarLibrosSinAEnEditorial():array
+    {
+        return $this->getEntityManager()->createQuery("select l from App\\Entity\\Libro l join l.editorial e where e.nombre not like '%a%'")->getResult();
+    }
+    function listarLibrosConUnAutor():array
+    {
+        return $this->getEntityManager()->createQuery("select l from App\\Entity\\Libro l join l.autores a where size(l.autores) = 1")->getResult();
+    }
 }

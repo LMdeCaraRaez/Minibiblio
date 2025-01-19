@@ -26,7 +26,7 @@ class Libro
     private ?int $paginas = null;
 
     #[ORM\ManyToOne(inversedBy: 'libros')]
-    private ?Editorial $Editorial = null;
+    private ?Editorial $editorial = null;
 
     #[ORM\ManyToMany(targetEntity: Autor::class, inversedBy: 'libros')]
     private Collection $autores;
@@ -79,12 +79,12 @@ class Libro
 
     public function getEditorial(): ?Editorial
     {
-        return $this->Editorial;
+        return $this->editorial;
     }
 
-    public function setEditorial(?Editorial $Editorial): static
+    public function setEditorial(?Editorial $editorial): static
     {
-        $this->Editorial = $Editorial;
+        $this->editorial = $editorial;
 
         return $this;
     }
