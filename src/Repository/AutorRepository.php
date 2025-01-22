@@ -26,5 +26,14 @@ class AutorRepository extends ServiceEntityRepository
         return $this->findAll();
     }
 
+    public function listarAutoresOrderByEdad(): array
+    {
+        return $this->getEntityManager()->createQuery("select a, size(a.libros) as nLibros from App\\Entity\\Autor a order by a.fechaNacimiento")->getResult();
+    }
+
+    public function listarAutoresPorLibroId($id)
+    {
+        return $this->getEntityManager()->createQuery("select a from App\\Entity\\Autor a where a.id = :id")->setParameter("id", $id)->getResult();
+    }
 
 }

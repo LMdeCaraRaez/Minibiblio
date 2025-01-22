@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block cuerpo %}
+{% for libro in libros %}
+    <p><a href="{{ path('ap8_autores', {"libroId": libro.id}) }}">{{ libro.titulo }}</a> <br> Páginas {{ libro.paginas }}</p>
+    {% endfor %}
+{% endblock %}
+

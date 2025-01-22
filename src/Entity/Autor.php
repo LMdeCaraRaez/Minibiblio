@@ -25,7 +25,7 @@ class Autor
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $fechaNacimiento = null;
 
-    #[ORM\ManyToMany(targetEntity: Libro::class, mappedBy: 'Autor')]
+    #[ORM\ManyToMany(targetEntity: Libro::class, mappedBy: 'autores')]
     private Collection $libros;
 
     public function __construct()

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block cuerpo %}
+    <table border="1px">
+        <tr>
+            <th>Nombre</th>
+            <th>Nacimiento</th>
+            <th>Numero de libros</th>
+        </tr>
+        {% for dato in datos %}
+            {% set autor = dato[0] %}
+            <tr>
+                <td>{{ autor.nombre }} {{ autor.apellidos }}</td>
+                <td>{{ autor.fechaNacimiento|date("d/m/y") }}</td>
+                <td>{{ dato.nLibros }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+

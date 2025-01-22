@@ -46,4 +46,9 @@ class LibroRepository extends ServiceEntityRepository
     {
         return $this->getEntityManager()->createQuery("select l from App\\Entity\\Libro l join l.autores a where size(l.autores) = 1")->getResult();
     }
+
+    function listarLibrosConAutoresOrderByTitulo():array
+    {
+        return $this->getEntityManager()->createQuery("select l,a from App\\Entity\\Libro l join l.autores a order by l.titulo")->getResult();
+    }
 }
