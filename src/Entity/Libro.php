@@ -31,6 +31,15 @@ class Libro
     #[ORM\ManyToMany(targetEntity: Autor::class, inversedBy: 'libros')]
     private Collection $autores;
 
+    #[ORM\ManyToOne(targetEntity: Socio::class, inversedBy: 'libros')]
+    private ?Socio $socio = null;
+
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $isbn = null;
+
+    #[ORM\Column]
+    private ?int $precioCompra = null;
+
     public function __construct()
     {
         $this->autores = new ArrayCollection();
@@ -109,6 +118,42 @@ class Libro
     public function removeAutor(Autor $autor): static
     {
         $this->autores->removeElement($autor);
+
+        return $this;
+    }
+
+    public function getSocio(): ?Socio
+    {
+        return $this->socio;
+    }
+
+    public function setSocio(?Socio $socio): static
+    {
+        $this->socio = $socio;
+
+        return $this;
+    }
+
+    public function getIsbn(): ?string
+    {
+        return $this->isbn;
+    }
+
+    public function setIsbn(string $isbn): static
+    {
+        $this->isbn = $isbn;
+
+        return $this;
+    }
+
+    public function getPrecioCompra(): ?int
+    {
+        return $this->precioCompra;
+    }
+
+    public function setPrecioCompra(int $precioCompra): static
+    {
+        $this->precioCompra = $precioCompra;
 
         return $this;
     }
