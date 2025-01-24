@@ -63,19 +63,16 @@ class Socio
 
         return $this;
     }
-
     public function getNombre(): ?string
     {
         return $this->nombre;
     }
-
     public function setNombre(?string $nombre): static
     {
         $this->nombre = $nombre;
 
         return $this;
     }
-
     /**
      * @return Collection<int, Libro>
      */
@@ -83,7 +80,6 @@ class Socio
     {
         return $this->libros;
     }
-
     public function addLibro(Libro $libro): static
     {
         if (!$this->libros->contains($libro)) {
@@ -93,7 +89,6 @@ class Socio
 
         return $this;
     }
-
     public function removeLibro(Libro $libro): static
     {
         if ($this->libros->removeElement($libro)) {
@@ -102,19 +97,15 @@ class Socio
                 $libro->setSocio(null);
             }
         }
-
         return $this;
     }
-
     public function getTelefono(): ?string
     {
         return $this->telefono;
     }
-
     public function setTelefono(?string $telefono): static
     {
         $this->telefono = $telefono;
-
         return $this;
     }
 }

@@ -3,7 +3,7 @@
 {% block cuerpo %}
 
     {% for libro in libros %}
-        <p>Titulo: {{ libro.titulo }} <br> Páginas {{ libro.paginas }}</p>
+        <p>Titulo: {{ libro.titulo }} <br> Páginas {{ libro.paginas }} <br>Socio asociado {{ libro.socio.nombre ?? "No tiene socio"}} {{ libro.socio.apellidos ?? "" }}</p>
     {% endfor %}
 {% endblock %}
 

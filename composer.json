@@ -74,8 +74,10 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^4.0",
         "symfony/maker-bundle": "^1.50",
         "symfony/stopwatch": "5.4.*",
-        "symfony/web-profiler-bundle": "5.4.*"
+        "symfony/web-profiler-bundle": "5.4.*",
+        "zenstruck/foundry": "^1.38"
     }
 }
