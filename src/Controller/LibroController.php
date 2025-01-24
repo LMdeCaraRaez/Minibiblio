@@ -69,7 +69,6 @@ class LibroController extends AbstractController
     function ap6(AutorRepository $autorRepository): Response
     {
         $datos = $autorRepository->listarAutoresOrderByEdad();
-        dump($datos);
         return $this->render("ap6.html.twig", ["datos" => $datos]);
     }
     #[Route("/ap7", name: "ap7")]
