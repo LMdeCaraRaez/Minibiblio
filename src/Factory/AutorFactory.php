@@ -53,7 +53,7 @@ final class AutorFactory extends PersistentProxyObjectFactory
         return [
             'apellidos' => self::faker()->lastName(),
             'fechaNacimiento' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'nombre' => self::faker()->name(255),
+            'nombre' => self::faker()->firstName(255),
         ];
     }
 

@@ -53,9 +53,9 @@ final class LibroFactory extends PersistentProxyObjectFactory
         return [
             'anioPublicacion' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'isbn' => self::faker()->isbn10(),
-            'paginas' => self::faker()->randomNumber(),
+            'paginas' => self::faker()->randomNumber(4),
             'precioCompra' => self::faker()->randomNumber(),
-            'titulo' => self::faker()->name(255),
+            'titulo' => self::faker()->text(50),
         ];
     }
 

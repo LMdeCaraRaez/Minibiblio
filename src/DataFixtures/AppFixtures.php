@@ -13,7 +13,6 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-
         EditorialFactory::createMany(100);
         AutorFactory::createMany(200);
         SocioFactory::createMany(20);
@@ -24,7 +23,6 @@ class AppFixtures extends Fixture
                 "editorial" => EditorialFactory::random()
             ];
         });
-
 
         $manager->flush();
     }
