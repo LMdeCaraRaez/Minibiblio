@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LibroRepository::class)]
 class Libro
@@ -17,15 +18,20 @@ class Libro
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2)]
     private ?string $titulo = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[Assert\NotBlank]
     private ?\DateTimeImmutable $anioPublicacion = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?int $paginas = null;
 
-    #[ORM\ManyToOne(targetEntity: Editorial::class ,inversedBy: 'libros')]
+    #[ORM\ManyToOne(targetEntity: Editorial::class, inversedBy: 'libros')]
+    #[Assert\NotBlank]
     private ?Editorial $editorial;
 
     #[ORM\ManyToMany(targetEntity: Autor::class, inversedBy: 'libros')]
@@ -34,10 +40,13 @@ class Libro
     #[ORM\ManyToOne(targetEntity: Socio::class, inversedBy: 'libros')]
     private ?Socio $socio = null;
 
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    #[Assert\Isbn]
+    #[Assert\NotBlank]
     private ?string $isbn = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?int $precioCompra = null;
 
     public function __construct()

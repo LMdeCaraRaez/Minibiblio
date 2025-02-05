@@ -55,7 +55,7 @@ final class SocioFactory extends PersistentProxyObjectFactory
             "apellidos" => self::faker()->lastName(),
             "nombre" => self::faker()->firstName(),
             "telefono" => self::faker()->mobileNumber(),
-            // TODO cambiar a que sea uno u otro en casa
+            // TODO cambiar a que sea uno u otro en casa (mira el de casa)
             "esDocente" => self::faker()->boolean(),
             "esEstudiante" => self::faker()->boolean(),
         ];
