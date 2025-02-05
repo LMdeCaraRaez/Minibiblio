@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block cuerpo %}
+
+    {% if libro.id is null %}
+        <h1>Crear nuevo libro</h1>
+    {% else %}
+        <h1>Modificar el libro {{ libro.titulo }}</h1>
+    {% endif %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {% if libro.id is null %}
+        <button type="submit" class="btn btn-primary">Crear</button>
+    {% else %}
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    {% endif %}
+
+
+    <a href="{{ path('libro_listar') }}" class="btn btn-primary">
+        <i class="fa fa-arrow-left"></i>Volver</a>
+    {{ form_end(form) }}
+{% endblock %}

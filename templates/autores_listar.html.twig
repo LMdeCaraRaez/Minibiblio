@@ -1,10 +1,10 @@
 {% extends "base.html.twig" %}
 
 {% block cuerpo %}
-    <table border="1px">
+    <table class="table table-bordered">
         <tr><td>Nombre</td><td>Apellidos</td><td>Fecha Nacimiento</td></tr>
         {% for autor in autores %}
-            <tr><td>{{ autor.nombre }}</td><td>Apellidos</td><td>Fecha Nacimiento</td></tr>
+            <tr><td>{{ autor.nombre }}</td><td> {{ autor.apellidos }}</td><td>{{ autor.fechaNacimiento|date("d/m/Y") }}</td></tr>
         {% endfor %}
     </table>
 {% endblock %}

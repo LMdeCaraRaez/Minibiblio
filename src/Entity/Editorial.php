@@ -21,7 +21,7 @@ class Editorial
     #[ORM\Column(length: 255)]
     private ?string $localidad = null;
 
-    #[ORM\OneToMany(targetEntity: Libro::class, mappedBy: 'Editorial')]
+    #[ORM\OneToMany(targetEntity: Libro::class, mappedBy: 'editorial')]
     private Collection $libros;
 
     public function __construct()

@@ -25,8 +25,8 @@ class Libro
     #[ORM\Column]
     private ?int $paginas = null;
 
-    #[ORM\ManyToOne(inversedBy: 'libros')]
-    private ?Editorial $editorial = null;
+    #[ORM\ManyToOne(targetEntity: Editorial::class ,inversedBy: 'libros')]
+    private ?Editorial $editorial;
 
     #[ORM\ManyToMany(targetEntity: Autor::class, inversedBy: 'libros')]
     private Collection $autores;

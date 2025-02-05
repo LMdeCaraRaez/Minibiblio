@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Libro;
+use App\Form\LibroType;
 use App\Repository\AutorRepository;
 use App\Repository\LibroRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,7 +18,6 @@ class LibroController extends AbstractController
     function listarLibros(LibroRepository $libroRepository)
     {
         $libros = $libroRepository->listarLibros();
-        dump($libros);
 
         return $this->render("libros_listar.html.twig", ["libros" => $libros]);
     }
@@ -24,7 +26,6 @@ class LibroController extends AbstractController
     function listarAutores(Libro $libro): Response
     {
         $autores = $libro->getAutores();
-        dump($autores);
 
         return $this->render("autores_listar.html.twig", ["autores" => $autores]);
     }
@@ -71,6 +72,7 @@ class LibroController extends AbstractController
         $datos = $autorRepository->listarAutoresOrderByEdad();
         return $this->render("ap6.html.twig", ["datos" => $datos]);
     }
+
     #[Route("/ap7", name: "ap7")]
     function ap7(LibroRepository $libroRepository): Response
     {
@@ -86,11 +88,62 @@ class LibroController extends AbstractController
         dump($libros);
         return $this->render("ap8.html.twig", ["libros" => $libros]);
     }
+
     #[Route("/ap8/{libroId}", name: "ap8_autores")]
     function ap8_2(AutorRepository $autorRepository, $libroId): Response
     {
         $autores = $autorRepository->listarAutoresPorLibroId($libroId);
         dump($autores);
         return $this->render("ap8_2.html.twig");
+    }
+
+    #[Route("/libro_modificar/{id}", name: "libro_modificar")]
+    function modificarLibro(Libro $libro, LibroRepository $libroRepository, Request $request): Response
+    {
+        $nuevo = $libro->getId() === null;
+
+        $form = $this->createForm(LibroType::class, $libro);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($nuevo) {
+                $libroRepository->addLibro($libro);
+            }
+
+            $libroRepository->saveLibros();
+            if ($nuevo) {
+                $this->addFlash("success", "Vehiculo creado con exito");
+            } else {
+                $this->addFlash("success", "Vehiculo editado con exito");
+            }
+            // Importante el return sino no funciona
+            return $this->redirectToRoute("libro_listar");
+        }
+
+        return $this->render("modificar_libro.html.twig", ["form" => $form->createView(), "libro" => $libro]);
+    }
+
+    #[Route("libro/eliminar/{id}", name: "libro_eliminar")]
+    function eliminarLibro(Libro $libro, Request $request, LibroRepository $libroRepository): Response
+    {
+        if ($request->request->has("confirmar")) {
+            try {
+                $libroRepository->remove($libro);
+                $libroRepository->saveLibros();
+                return $this->redirectToRoute("libro_listar");
+            } catch (\Exception $e) {
+                $this->addFlash("error", "No se ha podido eliminar el libro");
+            }
+        }
+
+        return $this->render("libro_eliminar.html.twig", ["libro" => $libro]);
+    }
+
+    #[Route("/libro_nuevo", name: "libro_nuevo")]
+    function libroNuevo(Request $request, LibroRepository $libroRepository): Response
+    {
+        $libro = new Libro();
+        $libroRepository->saveLibros();
+        return $this->modificarLibro($libro, $libroRepository, $request);
     }
 }

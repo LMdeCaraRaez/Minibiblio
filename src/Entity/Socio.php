@@ -30,6 +30,12 @@ class Socio
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $telefono = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $esDocente = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $esEstudiante = null;
+
     public function __construct()
     {
         $this->libros = new ArrayCollection();
@@ -106,6 +112,30 @@ class Socio
     public function setTelefono(?string $telefono): static
     {
         $this->telefono = $telefono;
+        return $this;
+    }
+
+    public function getEsDocente(): ?string
+    {
+        return $this->esDocente;
+    }
+
+    public function setEsDocente(?string $esDocente): static
+    {
+        $this->esDocente = $esDocente;
+
+        return $this;
+    }
+
+    public function getEsEstudiante(): ?string
+    {
+        return $this->esEstudiante;
+    }
+
+    public function setEsEstudiante(?string $esEstudiante): static
+    {
+        $this->esEstudiante = $esEstudiante;
+
         return $this;
     }
 }
