@@ -1,0 +1,12 @@
+    {% extends 'base.html.twig' %}
+
+{% block cuerpo %}
+    <h1>Eliminar el socio: {{ socio.nombre }}</h1>
+    <div class="alert alert-danger">
+        PELIGRO!!! Se va a eliminar permanentemente el socio {{ socio.nombre }}
+    </div>
+    <form method="post">
+        <a href=" {{ path('listar_socios') }}" class="btn btn-primary">Volver</a>
+        <button type="submit" class="btn btn-danger" name="confirmar">Confirmar eliminacion</button>
+    </form>
+{% endblock %}

@@ -1,23 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block cuerpo %}
-
-    {% if libro.id is null %}
-        <h1>Crear nuevo libro</h1>
+    {% if socio.id is null %}
+        <h1>Creación de nuevo socio</h1>
     {% else %}
-        <h1>Modificar el libro {{ libro.titulo }}</h1>
+        <h1>Editar el socio {{ socio.nombre }}</h1>
     {% endif %}
-
     {{ form_start(form) }}
     {{ form_widget(form) }}
-    {% if libro.id is null %}
-        <button type="submit" class="btn btn-primary">Crear</button>
-    {% else %}
+
+    {% if socio.id is null %}
+        <button type="submit" class="btn-primary btn">Crear nuevo socio</button>
+        {% else %}
         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
     {% endif %}
 
-
-    <a href="{{ path('libro_listar') }}" class="btn btn-primary">
+    <a href="{{ path('listar_socios') }}" class="btn btn-primary">
         <i class="fa fa-arrow-left"></i>Volver</a>
     {{ form_end(form) }}
 {% endblock %}

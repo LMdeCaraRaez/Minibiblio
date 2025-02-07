@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LibroRepository::class)]
+#[UniqueEntity(fields: "isbn", message: "Ya existe este isbn")]
 class Libro
 {
     #[ORM\Id]
@@ -35,18 +37,20 @@ class Libro
     private ?Editorial $editorial;
 
     #[ORM\ManyToMany(targetEntity: Autor::class, inversedBy: 'libros')]
+    #[Assert\Count(min: 1, minMessage: "Debe tener al menos un autor")]
     private Collection $autores;
 
     #[ORM\ManyToOne(targetEntity: Socio::class, inversedBy: 'libros')]
     private ?Socio $socio = null;
 
     #[ORM\Column(length: 255, unique: true, nullable: true)]
-    #[Assert\Isbn]
+    #[Assert\Isbn(message: "El isbn debe ser valido, de tipo 10 o 13")]
     #[Assert\NotBlank]
     private ?string $isbn = null;
 
     #[ORM\Column]
     #[Assert\NotBlank]
+    #[Assert\Positive(message: "El precio no puede ser negativo")]
     private ?int $precioCompra = null;
 
     public function __construct()

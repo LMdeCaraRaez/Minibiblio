@@ -21,28 +21,27 @@ class SocioRepository extends ServiceEntityRepository
         parent::__construct($registry, Socio::class);
     }
 
-//    /**
-//     * @return Socio[] Returns an array of Socio objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function listarSociosOrderByname()
+    {
+        return $this->createQueryBuilder("s")
+            ->select("s")
+            ->orderBy("s.nombre")
+            ->addOrderBy("s.apellidos")
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Socio
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function addSocio($socio): void
+    {
+        $this->getEntityManager()->persist($socio);
+    }
+
+    public function removeSocio($socio)
+    {
+        $this->getEntityManager()->remove($socio);
+    }
+    public function saveSocios()
+    {
+        $this->getEntityManager()->flush();
+    }
 }

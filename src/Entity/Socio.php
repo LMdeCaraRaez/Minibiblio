@@ -6,8 +6,11 @@ use App\Repository\SocioRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SocioRepository::class)]
+#[UniqueEntity(fields: "dni", message: "Ya existe alguien registrado con este dni")]
 class Socio
 {
     #[ORM\Id]
@@ -19,9 +22,11 @@ class Socio
     private ?string $dni = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank]
     private ?string $apellidos = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank]
     private ?string $nombre = null;
 
     #[ORM\OneToMany(targetEntity: Libro::class, mappedBy: 'socio')]

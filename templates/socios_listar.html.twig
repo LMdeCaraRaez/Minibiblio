@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block cuerpo %}
+    <h2 class="mt-5">Lista de socios</h2>
+    <a class="btn btn-primary" href="{{ path('socio_nuevo') }}"><i class="fa fa-plus mx-2"></i>Crear Nuevo</a>
+    <table class="table table-bordered mt-5">
+        <tr>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Dni</th>
+            <th>Teléfono</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% for socio in socios %}
+            <tr>
+                <td>{{ socio.nombre }}</td>
+                <td>{{ socio.apellidos }}</td>
+                <td>{{ socio.dni }}</td>
+                <td>{{ socio.telefono }}</td>
+                <td><a href="{{ path('socio_modificar', {id: socio.id}) }}"><i class="fa fa-pencil"></i></a></td>
+                <td><a href="{{ path('socio_eliminar', {id: socio.id}) }}"><i class="fa fa-trash"></i></a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
