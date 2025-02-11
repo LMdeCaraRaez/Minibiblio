@@ -41,6 +41,9 @@ class Socio
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $esEstudiante = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $email = null;
+
     public function __construct()
     {
         $this->libros = new ArrayCollection();
@@ -140,6 +143,18 @@ class Socio
     public function setEsEstudiante(?string $esEstudiante): static
     {
         $this->esEstudiante = $esEstudiante;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }
