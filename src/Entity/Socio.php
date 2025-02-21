@@ -7,11 +7,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @method string getUserIdentifier()
+ */
 #[ORM\Entity(repositoryClass: SocioRepository::class)]
 #[UniqueEntity(fields: "dni", message: "Ya existe alguien registrado con este dni")]
-class Socio
+class Socio implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -43,6 +48,12 @@ class Socio
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
+
+    #[ORM\Column]
+    private ?string $password = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $esAdministrador = null;
 
     public function __construct()
     {
@@ -155,6 +166,57 @@ class Socio
     public function setEmail(?string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function setPassword(?string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+
+
+    public function getRoles()
+    {
+        return ["ROLE_USER"];
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getUsername()
+    {
+        return $this->getEmail();
+    }
+
+    public function __call(string $name, array $arguments)
+    {
+        // TODO: Implement @method string getUserIdentifier()
+    }
+
+    public function isEsAdministrador(): ?bool
+    {
+        return $this->esAdministrador;
+    }
+
+    public function setEsAdministrador(?bool $esAdministrador): static
+    {
+        $this->esAdministrador = $esAdministrador;
 
         return $this;
     }

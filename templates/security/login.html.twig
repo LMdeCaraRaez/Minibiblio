@@ -1,0 +1,17 @@
+{% extends "base.html.twig" %}
+
+{% block cuerpo %}
+    <h1>Entrar a la minibiblio</h1>
+
+    {% if error %}
+        <h4 class="text-danger">{{ error.messageKey|trans(error.messageData, "security") }}</h4>
+    {% endif %}
+
+    <form method="post">
+        <input type="text" name="_username" placeholder="Nombre De Usuario" value="{{ last_username }}" required
+               {% if not error %}autofocus{% endif %}>
+        <input type="password" name="_password" placeholder="Contraseña" required
+               {% if not error %}autofocus{% endif %}>
+        <button type="submit" class="btn btn-primary">Entrar</button>
+    </form>
+{% endblock %}

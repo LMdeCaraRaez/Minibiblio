@@ -15,11 +15,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LibroController extends AbstractController
 {
     #[Route("/libro/listar", name: "libro_listar")]
-    function listarLibros(LibroRepository $libroRepository)
+    function listarLibros(LibroRepository $libroRepository): Response
     {
         $libros = $libroRepository->listarLibros();
 
@@ -200,7 +201,28 @@ class LibroController extends AbstractController
                 $this->addFlash("error", "No se ha podido eliminar el socio");
             }
         }
-
         return $this->render("socio_eliminar.html.twig", ["socio" => $socio]);
+    }
+
+    #[Route("/login", name: "app_login")]
+    function login(AuthenticationUtils $authenticationUtils): Response
+    {
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render("security/login.html.twig",[
+            "last_username" => $lastUsername,
+            "error" => $error,
+        ]);
+    }
+    #[Route("/logout", name: "app_logout")]
+    function logout()
+    {
+        throw new \LogicException("Esto no deberia ejecutarse nunca");
+    }
+    #[Route("/", name: "portada")]
+    function portada(): Response
+    {
+        return $this->render("portada.html.twig");
     }
 }
