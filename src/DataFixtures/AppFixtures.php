@@ -53,6 +53,16 @@ class AppFixtures extends Fixture
                 "esAdministrador" => true
             ]
         );
+        SocioFactory::createOne(
+            [
+                "email" => "bibliotecario@biblio.local",
+                "password" => $this->passwordHasher->hashPassword(
+                    new Socio(),
+                    "biblio"
+                ),
+                "esBibliotecario" => true
+            ]
+        );
         SocioFactory::createMany(20, function () {
             $esDocente = SocioFactory::faker()->boolean(10);
 
@@ -70,7 +80,6 @@ class AppFixtures extends Fixture
 
         EditorialFactory::createMany(100);
         AutorFactory::createMany(200);
-//        SocioFactory::createMany(20);
         LibroFactory::createMany(50, function () {
             return [
                 "autores" => AutorFactory::randomRange(1, 3),

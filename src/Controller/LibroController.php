@@ -10,6 +10,7 @@ use App\Repository\AutorRepository;
 use App\Repository\LibroRepository;
 use App\Repository\SocioRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +20,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LibroController extends AbstractController
 {
+    #[IsGranted("ROLE_USER")]
     #[Route("/libro/listar", name: "libro_listar")]
     function listarLibros(LibroRepository $libroRepository): Response
     {
@@ -27,6 +29,7 @@ class LibroController extends AbstractController
         return $this->render("libros_listar.html.twig", ["libros" => $libros]);
     }
 
+    #[IsGranted("ROLE_USER")]
     #[Route("/libro/autores/{id}", name: "libro_autores")]
     function listarAutores(Libro $libro): Response
     {

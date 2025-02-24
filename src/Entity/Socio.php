@@ -55,6 +55,9 @@ class Socio implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $esAdministrador = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $esBibliotecario = null;
+
     public function __construct()
     {
         $this->libros = new ArrayCollection();
@@ -179,9 +182,26 @@ class Socio implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
+    //importante, aunque de momento no se usen, esto no puede estar vacío
     public function getRoles()
     {
-        return ["ROLE_USER"];
+        $roles = [];
+        $roles[] = "ROLE_USER";
+
+        if ($this->esAdministrador) {
+            $roles[] = "ROLE_ADMIN";
+        }
+        if ($this->esDocente) {
+            $roles[] = "ROLE_DOCENTE";
+        }
+        if ($this->esBibliotecario) {
+            $roles[] = "ROLE_BIBLIOTECARIO";
+        }
+        if ($this->esEstudiante) {
+            $roles[] = "ROLE_ESTUDIANTE";
+        }
+
+        return $roles;
     }
 
     public function getPassword(): ?string
@@ -217,6 +237,18 @@ class Socio implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEsAdministrador(?bool $esAdministrador): static
     {
         $this->esAdministrador = $esAdministrador;
+
+        return $this;
+    }
+
+    public function isEsBibliotecario(): ?bool
+    {
+        return $this->esBibliotecario;
+    }
+
+    public function setEsBibliotecario(bool $esBibliotecario): static
+    {
+        $this->esBibliotecario = $esBibliotecario;
 
         return $this;
     }
