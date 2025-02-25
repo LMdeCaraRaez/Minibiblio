@@ -32,6 +32,7 @@ class SocioType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Socio::class,
+            "admin" => false
         ]);
     }
 }

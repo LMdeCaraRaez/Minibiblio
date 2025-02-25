@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Libro;
 use App\Entity\Socio;
+use App\Form\ChangeUserPasswordType;
 use App\Form\LibroType;
 use App\Form\SocioType;
 use App\Repository\AutorRepository;
@@ -15,29 +16,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LibroController extends AbstractController
 {
-    #[IsGranted("ROLE_USER")]
-    #[Route("/libro/listar", name: "libro_listar")]
-    function listarLibros(LibroRepository $libroRepository): Response
-    {
-        $libros = $libroRepository->listarLibros();
-
-        return $this->render("libros_listar.html.twig", ["libros" => $libros]);
-    }
-
-    #[IsGranted("ROLE_USER")]
-    #[Route("/libro/autores/{id}", name: "libro_autores")]
-    function listarAutores(Libro $libro): Response
-    {
-        $autores = $libro->getAutores();
-
-        return $this->render("autores_listar.html.twig", ["autores" => $autores]);
-    }
-
     #[Route("/ap1", name: "ap1")]
     function ap1(LibroRepository $libroRepository): Response
     {
@@ -104,6 +88,27 @@ class LibroController extends AbstractController
         dump($autores);
         return $this->render("ap8_2.html.twig");
     }
+
+    #[IsGranted("ROLE_USER")]
+    #[Route("/libro/listar", name: "libro_listar")]
+    function listarLibros(LibroRepository $libroRepository): Response
+    {
+        $libros = $libroRepository->listarLibros();
+
+        return $this->render("libros_listar.html.twig", ["libros" => $libros]);
+    }
+
+    #[IsGranted("ROLE_USER")]
+    #[Route("/libro/autores/{id}", name: "libro_autores")]
+    function listarAutores(Libro $libro): Response
+    {
+        $autores = $libro->getAutores();
+
+        return $this->render("autores_listar.html.twig", ["autores" => $autores]);
+    }
+
+
+    #[IsGranted("ROLE_ADMIN")]
     #[Route("libro/eliminar/{id}", name: "libro_eliminar")]
     function eliminarLibro(Libro $libro, Request $request, LibroRepository $libroRepository): Response
     {
@@ -120,6 +125,7 @@ class LibroController extends AbstractController
         return $this->render("libro_eliminar.html.twig", ["libro" => $libro]);
     }
 
+    #[IsGranted("ROLE_ADMIN")]
     #[Route("/libro_nuevo", name: "libro_nuevo")]
     function libroNuevo(Request $request, LibroRepository $libroRepository): Response
     {
@@ -128,6 +134,8 @@ class LibroController extends AbstractController
         return $this->modificarLibro($libro, $libroRepository, $request);
     }
 
+
+    #[IsGranted("ROLE_BIBLIOTECARIO")]
     #[Route("/socio/listar", name: "listar_socios")]
     function socioListar(SocioRepository $socioRepository): Response
     {
@@ -136,12 +144,17 @@ class LibroController extends AbstractController
         return $this->render("socios_listar.html.twig", ["socios" => $socios]);
     }
 
+    #[IsGranted("ROLE_DOCENTE")]
     #[Route("/libro_modificar/{id}", name: "libro_modificar")]
     function modificarLibro(Libro $libro, LibroRepository $libroRepository, Request $request): Response
     {
         $nuevo = $libro->getId() === null;
 
-        $form = $this->createForm(LibroType::class, $libro);
+        if ($this->isGranted("ROLE_BIBLIOTECARIO")) {
+            $form = $this->createForm(LibroType::class, $libro, ["bibliotecario" => true]);
+        } else {
+            $form = $this->createForm(LibroType::class, $libro, ["bibliotecario" => false]);
+        }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -162,6 +175,7 @@ class LibroController extends AbstractController
         return $this->render("modificar_libro.html.twig", ["form" => $form->createView(), "libro" => $libro]);
     }
 
+    #[IsGranted("ROLE_USER")]
     #[Route("/socio/modificar/{id}", name: "socio_modificar")]
     function modificarSocio(Socio $socio, SocioRepository $socioRepository, Request $request): Response
     {
@@ -184,6 +198,7 @@ class LibroController extends AbstractController
         return $this->render("modificar_socios.html.twig", ["form" => $form->createView(), "socio" => $socio]);
     }
 
+    #[IsGranted("ROLE_ADMIN")]
     #[Route("/socio/nuevo", name: "socio_nuevo")]
     function crearSocio(SocioRepository $socioRepository, Request $request): Response
     {
@@ -192,6 +207,7 @@ class LibroController extends AbstractController
         return $this->modificarSocio($socio, $socioRepository, $request);
     }
 
+    #[IsGranted("ROLE_USER")]
     #[Route("socio/borrar/{id}", name: "socio_eliminar")]
     function eliminarSocio(Socio $socio, SocioRepository $socioRepository, Request $request): Response
     {
@@ -207,25 +223,79 @@ class LibroController extends AbstractController
         return $this->render("socio_eliminar.html.twig", ["socio" => $socio]);
     }
 
+
+    //Login y logout no necesitan ningun tipo de validacion
     #[Route("/login", name: "app_login")]
     function login(AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render("security/login.html.twig",[
+        return $this->render("security/login.html.twig", [
             "last_username" => $lastUsername,
             "error" => $error,
         ]);
     }
+
     #[Route("/logout", name: "app_logout")]
     function logout()
     {
         throw new \LogicException("Esto no deberia ejecutarse nunca");
     }
+
     #[Route("/", name: "portada")]
     function portada(): Response
     {
         return $this->render("portada.html.twig");
+    }
+
+    #[IsGranted("ROLE_USER")]
+    #[Route("/clave")]
+    function cambiarClavePropia(Request $request, UserPasswordHasherInterface $passwordEncoder, SocioRepository $socioRepository): Response
+    {
+        $user = $this->getUser();
+
+        $form = $this->createForm(ChangeUserPasswordType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $passwordEncoder->hashPassword($user, $form->get("newPassword")->getData())
+            );
+            $socioRepository->saveSocios();
+            $this->addFlash("success", "Se ha actualizado tu contraseña correctamente");
+
+            return $this->redirectToRoute("portada");
+        }
+
+        return $this->render("security/change_password.html.twig", [
+            "form" => $form->createView(),
+        ]);
+    }
+
+    #[IsGranted("ROLE_USER")]
+    #[Route("/clave/{id}", name: "cambiar_clave_usuario")]
+    function cambiarClaveUsuario(Request $request, UserPasswordHasherInterface $passwordEncoder, SocioRepository $socioRepository, Socio $user): Response
+    {
+
+        $form = $this->createForm(ChangeUserPasswordType::class, $user, [
+            "admin" => $user !== $this->getUser() // comprobamos que no nos cambiemos a nosotros mismos la contra
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $passwordEncoder->hashPassword($user, $form->get("newPassword")->getData())
+            );
+            $socioRepository->saveSocios();
+            $this->addFlash("success", "Se ha actualizado tu contraseña correctamente");
+
+            return $this->redirectToRoute("portada");
+        }
+
+        return $this->render("security/change_password.html.twig", [
+            "form" => $form->createView(),
+        ]);
     }
 }

@@ -2,15 +2,19 @@
 
 {% block cuerpo %}
     <h1 class="mt-5">Listado de los libros</h1>
-    <a href="{{ path('libro_nuevo') }}" class="btn-primary btn"><i class="fa fa-plus"></i> Nuevo Libro</a>
+    {% if is_granted("ROLE_ADMIN") %}
+        <a href="{{ path('libro_nuevo') }}" class="btn-primary btn"><i class="fa fa-plus"></i> Nuevo Libro</a>
+    {% endif %}
+
     <table class="table table-bordered m-4">
         <tr>
             <th>Editorial</th>
             <th>Titulo</th>
             <th>Año Publicación</th>
             <th>Paginas</th>
-            <th></th>
-            <th></th>
+            <th>Prestado</th>
+            <th>Editar</th>
+            <th>Borrar</th>
         </tr>
         {% for libro in libros %}
             <tr>
@@ -18,11 +22,26 @@
                 <td><a href="{{ path('libro_autores', {'id': libro.id }) }}">{{ libro.titulo }}</a></td>
                 <td>{{ libro.anioPublicacion | date("d-m-Y") }}</td>
                 <td>{{ libro.paginas }}</td>
+                {% if is_granted("ROLE_DOCENTE") or is_granted("ROLE_BIBLIOTECARIO") %}
+                    <td>{{ libro.socio ? libro.socio.nombre : "No prestado" }} {{ libro.socio ? libro.socio.apellidos : "" }}</td>
+                {% else %}
+                    <td>{{ libro.socio ? "Prestado": "No prestado" }}</td>
+                {% endif %}
+
                 <td>
-                    <a href="{{ path('libro_modificar', {"id": libro.id}) }}"><i class="fa fa-pencil"></i></a>
+                    {% if is_granted("ROLE_BIBLIOTECARIO") or is_granted("ROLE_DOCENTE") and libro.socio and libro.socio.email == app.user.email %}
+                        <a href="{{ path('libro_modificar', {"id": libro.id}) }}"><i class="fa fa-pencil"></i></a>
+                        {% else %}
+                        No se puede modificar
+                    {% endif %}
                 </td>
                 <td>
-                    <a href="{{ path('libro_eliminar', {"id": libro.id}) }}"><i class="fa fa-trash"></i></a>
+                    {% if is_granted("ROLE_ADMIN") and not libro.socio %}
+                        <a href="{{ path('libro_eliminar', {"id": libro.id}) }}"><i class="fa fa-trash"></i></a>
+                        {% else %}
+                            No se puede borrar
+                    {% endif %}
+
                 </td>
             </tr>
         {% endfor %}

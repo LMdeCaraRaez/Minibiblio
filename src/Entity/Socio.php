@@ -183,7 +183,7 @@ class Socio implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     //importante, aunque de momento no se usen, esto no puede estar vacío
-    public function getRoles()
+    public function getRoles(): array
     {
         $roles = [];
         $roles[] = "ROLE_USER";
@@ -201,7 +201,8 @@ class Socio implements UserInterface, PasswordAuthenticatedUserInterface
             $roles[] = "ROLE_ESTUDIANTE";
         }
 
-        return $roles;
+
+        return array_unique($roles);
     }
 
     public function getPassword(): ?string

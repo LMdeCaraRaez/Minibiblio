@@ -27,7 +27,7 @@
         <a class="navbar-brand" href="{{ path('portada') }}">Minibiblio <i
                     class="fa fa-book-open"></i>
             {% if app.user %}
-                 - Conectado cómo: {{ app.user.email }}
+                - Conectado cómo: {{ app.user.email }}
             {% endif %} </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,11 +36,15 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href=" {{ path('libro_listar') }}">Listado de
-                        libros</a>
+                    {% if is_granted("ROLE_USER") %}
+                        <a class="nav-link active" aria-current="page" href=" {{ path('libro_listar') }}">Listado de libros</a>
+                    {% endif %}
+
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('listar_socios') }}">Listado de socios</a>
+                    {% if is_granted("ROLE_BIBLIOTECARIO") %}
+                        <a class="nav-link" href="{{ path('listar_socios') }}">Listado de socios</a>
+                    {% endif %}
                 </li>
             </ul>
             <span class="navbar-text">
