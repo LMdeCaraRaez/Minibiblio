@@ -27,16 +27,16 @@
                 {% else %}
                     <td>{{ libro.socio ? "Prestado": "No prestado" }}</td>
                 {% endif %}
-
+                
                 <td>
-                    {% if is_granted("ROLE_BIBLIOTECARIO") or is_granted("ROLE_DOCENTE") and libro.socio and libro.socio.email == app.user.email %}
+                    {% if is_granted("LIBRO_EDIT", libro) %}
                         <a href="{{ path('libro_modificar', {"id": libro.id}) }}"><i class="fa fa-pencil"></i></a>
                         {% else %}
                         No se puede modificar
                     {% endif %}
                 </td>
                 <td>
-                    {% if is_granted("ROLE_ADMIN") and not libro.socio %}
+                    {% if is_granted("LIBRO_DELETE", libro) %}
                         <a href="{{ path('libro_eliminar', {"id": libro.id}) }}"><i class="fa fa-trash"></i></a>
                         {% else %}
                             No se puede borrar
